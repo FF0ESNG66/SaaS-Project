@@ -33,6 +33,7 @@ def create_checkout_session(request, course_id):
             "quantity": 1
         }],
         mode="payment",
+        
         success_url=request.build_absolute_uri(reverse("payment:course-success")),
         cancel_url=request.build_absolute_uri(reverse("payment:course-cancel")),
         metadata= {
@@ -47,21 +48,19 @@ def create_checkout_session(request, course_id):
 @csrf_exempt
 @require_POST
 def stripe_webhook(request):
-    payload = smart_str(request.body)   # We're getting the payload which is what's sent us from Stripe and going to decode this for us
-    sig_header = request.META["HTTP_STRIPE_SIGNATURE"] # Getting the signature associated with it
-
-    # In theory we're making sure that we're getting the correct stripe weeb hook call that
-    # is actually related to the purchase
+    payload = smart_str(request.body)   # We're getting the payload which is what's sent us from Stripe and going to decode this into a string to be compatible with Python
+    sig_header = request.META["HTTP_STRIPE_SIGNATURE"]  # Here we're retrieven the signature from the request. 
+                                                        # Stripe signs the webhook payload with this signature and we'll use it for verification
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET # This will verify that all this data is correct and valid and that it's sent from the correct place
+            payload, sig_header, settings.STRIPE_ENDPOINT_SECRET # This method is used to construct an event using the data provided inside and then verify the authenticity
         )
     except ValueError:
-        return JsonResponse({'error': 'Invalid payload'}, status=400)
+        return JsonResponse({'error': 'Invalid payload'}, status=400) # THis will be raised if the payload is invalid.
     
     except stripe.error.SignatureVerificationError:
-        return JsonResponse({'error': 'Invalid signature'}, status=400)
+        return JsonResponse({'error': 'Invalid signature'}, status=400) # And this one is raised if the signature verification fails.
     
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"] # If everything is good this variable will contain our metadata (and other data) from "create_checkout_session" view
