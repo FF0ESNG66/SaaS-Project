@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Courses</h2>
+    <br>
+    {% for course in courses %}
+        <div class="card p-2 d-flex flex-row align-items-center">
+            <div class="col-10">{{ course.title }} {% if not course.is_unlocked %} - {{ course.price }} USD {% endif %}</div>   
+            <div class="col-2">
+                {% if course.is_unlocked %}
+                    <a class="btn btn-success" href="{% url 'course:course-detail' course.id %}">View Course</a>
+                {% else %}
+                    <a class="btn btn-danger" href="{% url 'payment:create-checkout-session' course.id %}">Buy Course</a>
+                {% endif %}
+            </div> 
+        </div>
+    {% endfor %}
+{% endblock %}
