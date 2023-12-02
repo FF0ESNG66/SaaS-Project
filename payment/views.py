@@ -45,6 +45,15 @@ def create_checkout_session(request, course_id):
     return redirect(session.url)
 
 
+# Observation:
+# In "create_checkout_session" I'm, indeed, creating a session with all the params required for the Stripe's API
+# I do also create a success/cancel view that both goes to the same place but I just add them for experimental purposes.
+
+# Once the request is sent to Stripe, Stripe will do all the process for payment and it will send me a POST request
+# POST request that I'll handle in my stripe_webhook view and then I'll do a logic for unlock the course later in another view
+
+
+
 @csrf_exempt
 @require_POST
 def stripe_webhook(request):

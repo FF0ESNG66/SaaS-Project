@@ -16,3 +16,13 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
+
+# Observation:
+
+# I'm importing and inheriting "UserAdmin" provided by Django for managing users in the admin panel
+
+# I use the form that I've created in order to select the fields to display
+# Inside of the tuple "add_fieldsets" I add those fields
+
+# Then I register the CustomUser model with the CustomUserAdmin configuration enabling the admin panel to manage CustomUser instances using the customized admin interface.
+
