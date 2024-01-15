@@ -16,6 +16,10 @@ class Course(models.Model):
         verbose_name = "course"
         verbose_name_plural = "courses"
         db_table = "course"
+        class Meta:
+        indexes = [
+            models.Index(fields=['title']),
+        ]
 
 
     def __str__(self) -> str:
