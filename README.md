@@ -12,7 +12,7 @@ Welcome to the Online Course Marketplace – a platform where courses are not ju
    - Implemented Stripe as a secure payment system, ensuring a seamless transaction experience.
 
 
-## Lessons Learned (Important)
+## Observations
 
 Embarking on the development journey for this online course marketplace has been enlightening. Here are some valuable insights gained from the process:
 
